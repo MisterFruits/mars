@@ -6,12 +6,7 @@ import argparse
 import pandas as pd
 
 def read_matrix(filepath_or_buffer):
-    index = ['GEN1', 'GEN2']
-    d = {'LIB1' : pd.Series([1, 0], index=index),
-         'LIB2' : pd.Series([0, 25], index=index),
-         'LIB3' : pd.Series([0, 3], index=index)}
-
-    df = pd.DataFrame(d)
+    df = pd.read_csv(filepath_or_buffer, sep=' ')
     return df
 
 def main():
