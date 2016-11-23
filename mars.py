@@ -21,10 +21,13 @@ def main():
     ap.add_argument('matrix', help='path to the matrix file')
     ap.add_argument('--lib-filter', '-l', help='filter library names using regex',
                     default=None)
+    ap.add_argument('--feature-filter', '-f', help='filter features name using regex',
+                    default=None)
 
     args = ap.parse_args()
 
-    print(read_matrix(args.matrix, lib_filter=args.lib_filter))
+    print(read_matrix(args.matrix, lib_filter=args.lib_filter,
+                      feature_filter=args.feature_filter))
 
 if __name__ == '__main__':
     main()
