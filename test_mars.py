@@ -8,7 +8,7 @@ def test_read_matrix():
          'LIB2' : pd.Series([0, 25], index=index),
          'LIB3' : pd.Series([0, 3], index=index)}
     df = pd.DataFrame(d)
-    assert_frame_equal(df, read_matrix("mock.txt"))
+    assert_frame_equal(df, read_matrix("mock.txt").to_dense())
 
     index = ['GEN45', 'GEN2']
     d = {'LIB1' : pd.Series([1, 0], index=index),
@@ -37,14 +37,14 @@ def test_read_matrix_lib_filter():
          'LIB2' : pd.Series([0, 25], index=index),
          'LIB3' : pd.Series([0, 3], index=index)}
     df = pd.DataFrame(d)
-    assert_frame_equal(df, read_matrix("mock.txt", lib_filter=r'LIB[0-9]'))
+    assert_frame_equal(df, read_matrix("mock.txt", lib_filter=r'LIB[0-9]').to_dense())
 
     index = ['GEN1', 'GEN2']
     d = {'LIB1' : pd.Series([1, 0], index=index),
          'LIB3' : pd.Series([0, 3], index=index)}
 
     df = pd.DataFrame(d)
-    assert_frame_equal(df, read_matrix("mock.txt", lib_filter=r'LIB(1|3)'))
+    assert_frame_equal(df, read_matrix("mock.txt", lib_filter=r'LIB(1|3)').to_dense())
 
 def test_read_matrix_feature_filter():
     index = ['GEN1', 'GEN2']

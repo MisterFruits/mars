@@ -6,15 +6,36 @@ import argparse
 import pandas as pd
 
 def read_matrix(filepath_or_buffer, lib_filter=None, feature_filter=None):
-    df = pd.read_csv(filepath_or_buffer, sep=' ')
+    reader = pd.read_csv(filepath_or_buffer, sep=' ', chunksize=1000, na_filter=False)
+    result = _filter(next(reader), lib_filter, feature_filter).to_sparse(fill_value=0)
+    log_df(result)
+    for temporary_df in reader:
+        result = pd.concat([result, _filter(temporary_df, lib_filter, feature_filter).to_sparse(fill_value=0)], axis=0)
+        log_df(result)
+
     if lib_filter is not None:
-        print("j'adoore"+ lib_filter)
-        df = df.filter(regex=lib_filter, axis=1)
+        result = result.filter(regex=lib_filter, axis=1)
     if feature_filter is not None:
-        df = df.filter(regex=feature_filter, axis=0)
+        result = result.filter(regex=feature_filter, axis=0)
 
+    return result
 
-    return df
+def _filter(df, lib_filter=None, feature_filter=None):
+    result = df
+    if lib_filter is not None:
+        result = df.filter(regex=lib_filter, axis=1)
+    if feature_filter is not None:
+        result = result.filter(regex=feature_filter, axis=0)
+    return result
+
+def log_df(df):
+    print("df sparse size =", df.memory_usage().sum())
+    try:
+        print("Bytes, density =", df.density)
+    except ZeroDivisionError as e:
+        pass
+    print(type(df))
+    print('default_fill_value =', df.default_fill_value)
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
