@@ -7,7 +7,6 @@ def test_read_matrix():
     d = {'LIB1' : pd.Series([1, 0], index=index),
          'LIB2' : pd.Series([0, 25], index=index),
          'LIB3' : pd.Series([0, 3], index=index)}
-
     df = pd.DataFrame(d)
     assert_frame_equal(df, read_matrix("mock.txt"))
 
@@ -15,7 +14,6 @@ def test_read_matrix():
     d = {'LIB1' : pd.Series([1, 0], index=index),
          'LIB2' : pd.Series([0, 25], index=index),
          'LIB3' : pd.Series([0, 3], index=index)}
-
     df = pd.DataFrame(d)
     assert not df.equals(read_matrix("mock.txt"))
 
@@ -23,7 +21,6 @@ def test_read_matrix():
     d = {'LIB1' : pd.Series([1, 0], index=index),
          'LIB27' : pd.Series([0, 25], index=index),
          'LIB3' : pd.Series([0, 3], index=index)}
-
     df = pd.DataFrame(d)
     assert not df.equals(read_matrix("mock.txt"))
 
@@ -31,6 +28,20 @@ def test_read_matrix():
     d = {'LIB1' : pd.Series([1, 0], index=index),
          'LIB2' : pd.Series([0, 0], index=index),
          'LIB3' : pd.Series([0, 3], index=index)}
-
     df = pd.DataFrame(d)
     assert not df.equals(read_matrix("mock.txt"))
+
+def test_read_matrix_lib_filter():
+    index = ['GEN1', 'GEN2']
+    d = {'LIB1' : pd.Series([1, 0], index=index),
+         'LIB2' : pd.Series([0, 25], index=index),
+         'LIB3' : pd.Series([0, 3], index=index)}
+    df = pd.DataFrame(d)
+    assert_frame_equal(df, read_matrix("mock.txt", lib_filter=r'LIB[0-9]'))
+
+    index = ['GEN1', 'GEN2']
+    d = {'LIB1' : pd.Series([1, 0], index=index),
+         'LIB3' : pd.Series([0, 3], index=index)}
+
+    df = pd.DataFrame(d)
+    assert_frame_equal(df, read_matrix("mock.txt", lib_filter=r'LIB(1|3)'))
