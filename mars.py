@@ -9,7 +9,7 @@ import numpy as np
 def read_matrix(filepath_or_buffer, lib_filter=None, feature_filter=None):
     reader = pd.read_table(filepath_or_buffer, sep=' ',
                          chunksize=1000, na_filter=False,
-                         converters={0: str}, dtype=np.int16)
+                         converters={0: str}, dtype=np.uint16)
 
     result = _filter(next(reader), lib_filter, feature_filter).to_sparse(fill_value=0)
     log_df(result)
