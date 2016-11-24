@@ -11,16 +11,11 @@ def read_matrix(filepath_or_buffer, lib_filter=None, feature_filter=None):
                          chunksize=1000, na_filter=False,
                          converters={0: str}, dtype=np.uint16)
 
-    result = _filter(next(reader), lib_filter, feature_filter).to_sparse(fill_value=0)
+    result = _filter(next(reader), lib_filter, feature_filter)
     log_df(result)
     for temporary_df in reader:
-        result = pd.concat([result, _filter(temporary_df, lib_filter, feature_filter).to_sparse(fill_value=0)], axis=0)
+        result = pd.concat([result, _filter(temporary_df, lib_filter, feature_filter)], axis=0)
         log_df(result)
-
-    if lib_filter is not None:
-        result = result.filter(regex=lib_filter, axis=1)
-    if feature_filter is not None:
-        result = result.filter(regex=feature_filter, axis=0)
 
     return result
 
