@@ -12,10 +12,9 @@ def read_matrix(filepath_or_buffer, lib_filter=None, feature_filter=None):
                          converters={0: str}, dtype=np.uint16)
 
     result = _filter(next(reader), lib_filter, feature_filter)
-    log_df(result)
+
     for temporary_df in reader:
         result = pd.concat([result, _filter(temporary_df, lib_filter, feature_filter)], axis=0)
-        log_df(result)
 
     return result
 
@@ -27,14 +26,6 @@ def _filter(df, lib_filter=None, feature_filter=None):
         result = result.filter(regex=feature_filter, axis=0)
     return result
 
-def log_df(df):
-    print("df sparse size =", df.memory_usage().sum())
-    try:
-        print("Bytes, density =", df.density)
-    except ZeroDivisionError as e:
-        pass
-    print(type(df))
-    print('default_fill_value =', df.default_fill_value)
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
